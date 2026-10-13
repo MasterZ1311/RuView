@@ -2,9 +2,10 @@
 
 // Auto-detect the backend URL from the page origin so the UI works whether
 // served from Docker (:3000), local dev (:8080), or any other port.
-const _origin = (typeof window !== 'undefined' && window.location && window.location.origin)
-  ? window.location.origin
-  : 'http://localhost:3000';
+const isLocalDev = typeof window !== 'undefined' && window.location && (window.location.port === '3000' || window.location.port === '8080');
+const _origin = isLocalDev
+  ? 'http://localhost:8000'
+  : ((typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : 'http://localhost:8000');
 
 export const API_CONFIG = {
   BASE_URL: _origin,
@@ -121,8 +122,8 @@ export function buildWsUrl(endpoint, params = {}) {
     ? API_CONFIG.WSS_PREFIX
     : API_CONFIG.WS_PREFIX;
 
-  // Derive host from the page origin so it works on any port (Docker :3000, dev :8080, etc.)
-  const host = window.location.host;
+  // Derive host from the page origin so it works on any port, targeting port 8000 during local development
+  const host = (window.location.port === '3000' || window.location.port === '8080') ? 'localhost:8000' : window.location.host;
   let url = `${protocol}${host}${endpoint}`;
   
   // Add query parameters

@@ -20,9 +20,9 @@ export function buildSensingWsUrl(locationLike = (typeof window !== 'undefined' 
   const protocol = locationLike && locationLike.protocol === 'https:' ? 'wss:' : 'ws:';
   const host = locationLike && locationLike.host ? locationLike.host : 'localhost:3001';
   const hostname = locationLike && locationLike.hostname ? locationLike.hostname : host.split(':')[0];
-  const port = locationLike && locationLike.port ? locationLike.port : '';
-  const wsPort = SENSING_WS_PORT_BY_HTTP_PORT[port];
-  const wsHost = wsPort ? `${hostname}:${wsPort}` : host;
+  // Target Python sensing WebSocket on port 8765 during local development
+  const wsPort = (port === '3000' || port === '8080') ? '8765' : (SENSING_WS_PORT_BY_HTTP_PORT[port] || '8765');
+  const wsHost = `${hostname}:${wsPort}`;
 
   return `${protocol}//${wsHost}/ws/sensing`;
 }
@@ -309,7 +309,7 @@ class SensingService {
    */
   _applyServerSource(rawSource) {
     this._serverSource = rawSource;
-    if (rawSource === 'esp32' || rawSource === 'wifi' || rawSource === 'live') {
+    if (rawSource === 'esp32' || rawSource === 'wifi' || rawSource === 'live' || rawSource === 'windows_wifi' || rawSource === 'linux_wifi' || rawSource === 'macos_wifi') {
       this._setDataSource('live');
     } else if (rawSource === 'simulated' || rawSource === 'simulate') {
       this._setDataSource('server-simulated');

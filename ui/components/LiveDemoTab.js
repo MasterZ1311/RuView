@@ -1328,7 +1328,7 @@ export class LiveDemoTab {
     if (!banner) return;
     const ds = sensingService.dataSource;
     const config = {
-      'live':             { text: 'LIVE \u2014 ESP32 Hardware Connected',           cls: 'demo-source-live' },
+      'live':             { text: 'LIVE \u2014 WiFi / ESP32 Hardware Connected',    cls: 'demo-source-live' },
       'server-simulated': { text: 'SIMULATED DATA \u2014 No Hardware Detected',     cls: 'demo-source-sim' },
       'reconnecting':     { text: 'RECONNECTING TO SERVER...',                      cls: 'demo-source-reconnecting' },
       'simulated':        { text: 'OFFLINE \u2014 Server Unreachable, Local Sim',   cls: 'demo-source-offline' },
